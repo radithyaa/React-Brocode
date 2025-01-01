@@ -1,36 +1,74 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export default function MyComponent() {
-  const [foods, setFoods] = useState(["Apple", "Mango"]);
-  const foodInputRef = useRef(null);
+  const [cars, setCars] = useState([]);
+  const [carMake, setCarMake] = useState("");
+  const [carModel, setCarModel] = useState("");
+  const [carYear, setCarYear] = useState(new Date().getFullYear());
 
-  function handleAddFood() {
-    const newFood = foodInputRef.current.value;
-    foodInputRef.current.value = "";
+  function handleAddCar() {
+    //TODO: Implemet add car logic
+    const newCar = {
+      make: carMake,
+      model: carModel,
+      year: carYear,
+    };
 
-    if (!newFood) {
+    if (!carMake || !carModel || !carYear) {
+      alert("Please fill in all fields before adding a car.");
       return;
     }
-    setFoods((foods) => [...foods, newFood]);
-  }
 
-  function handleRemoveFood(index) {
-    setFoods(foods.filter((_, i) => i !== index));
+    setCars((cars) => [...cars, newCar]);
+
+    // Reset form inputs
+    setCarMake("");
+    setCarModel("");
+    setCarYear(new Date().getFullYear());
+  }
+  function handleRemoveCar(index) {
+    // TODO: Implement removing car logic
+    setCars((cars) => cars.filter((_, i) => i !== index));
+  }
+  function handleAddCarYear(event) {
+    setCarYear(event.target.value);
+  }
+  function handleAddCarModel(event) {
+    setCarModel(event.target.value);
+  }
+  function handleAddCarMake(event) {
+    setCarMake(event.target.value);
   }
 
   return (
-    <>
-      <h1>List Of Food</h1>
-
+    <div>
+      <h2>List of Car Objects</h2>
       <ul>
-        {foods.map((food, index) => (
-          <li key={index} onClick={() => handleRemoveFood(index)}>
-            {food}
+        {cars.map((car, index) => (
+          <li key={index} onClick={() => handleRemoveCar(index)}>
+            {car.make} {car.model} {car.year}
           </li>
         ))}
       </ul>
-      <input type="text" ref={foodInputRef} placeholder="Enter Food Name" />
-      <button onClick={handleAddFood}>Add Food</button>
-    </>
+      <input
+        type="text"
+        placeholder="Make"
+        value={carMake}
+        onChange={handleAddCarMake}
+      />
+      <input
+        type="text"
+        placeholder="Model"
+        value={carModel}
+        onChange={handleAddCarModel}
+      />
+      <input
+        type="number"
+        placeholder="Year"
+        value={carYear}
+        onChange={handleAddCarYear}
+      />
+      <button onClick={handleAddCar}>Add Car</button>
+    </div>
   );
 }
